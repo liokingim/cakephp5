@@ -30,18 +30,66 @@ class StudentsController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
+
+        // // 멤버 데이터 배열
+        $memberData = [
+            'id' => '123',
+            'name' => '山田',
+            'number' => '0011223344',
+            'time' => time()
+        ];
+
+        // 쿠키 생성 및 설정
+        // $cookie = new Cookie(
+        //     'memberTokenDetail',                // 쿠키 이름
+        //     json_encode($memberData, JSON_UNESCAPED_UNICODE), // 멤버 데이터를 JSON 문자열로 인코딩
+        //     // $memberData,
+        //     new \DateTime('+1 week')  // 쿠키의 유효 기간 설정
+        // );
+
+        // // 쿠키를 응답에 추가
+        // return $this->response->withCookie($cookie);
+
+// var_dump($this->request->getCookie('memberTokenDetail'));
+
+        // $options = [
+        //     'expires' => null,
+        //     'path' => '/',
+        //     'domain' => $this->request->domain(),
+        //     'secure' => false,
+        //     'httponly' => true,
+        //     'samesite' => null
+        // ];
+
+        // return $this->response->withCookie(Cookie::create('userId', $memberData, $options));
+
         $data = [
             'memberId' => '1234567890',
             'token' => '1234567890'
         ];
 
         // 쿠키 쓰기
-        $this->response = $this->cookieManager->write('memberTokenDetail', $data);
+        // $this->response = $this->cookieManager->write('token', 'test1234');
+        // $this->response = $this->cookieManager->write('memberTokenDetail', 'testafafafafa');
+        // $this->response = $this->cookieManager->write(['memberTokenDetail' => 'testafafafafa']);
+        // $this->response = $this->cookieManager->write(['memberTokenDetail' => 'testafafafafa', 'token' => 'test1234']);
+    //     $this->response = $this->cookieManager->write(['memberTokenDetail' => ['name' => 'test3234234'],
+    //     'memberTokenDetail.id' => 'test1234',
+    //     'memberTokenDetail.test' => 'testtest'
+    // ]);
+        // $this->response = $this->cookieManager->write([
+        //     'memberTokenDetail' => ['name' => 'test3234234', 'id' => 'tttttt'],
+        // ]);
+
+
         $this->response = $this->cookieManager->write('memberTokenDetail.id', 'test1234');
+        // $this->response = $this->cookieManager->write('memberTokenDetail', json_encode($data));
+
+        // $this->response->withCookieCollection($cookieCollection);
 
         // // 쿠키 읽기
-        $memberId = $this->cookieManager->read('memberTokenDetail');
-        var_dump($memberId);
+        // $memberId = $this->cookieManager->read('memberTokenDetail');
+        // var_dump($memberId);
 
 
         // $this->Cookie->write('Preference.color', 'blue');
