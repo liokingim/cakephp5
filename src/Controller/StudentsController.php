@@ -10,7 +10,7 @@ use Cake\Http\Cookie\Cookie;
  * Students Controller
  *
  */
-class StudentsController extends AppController
+class StudentsController extends SessionController
 {
     protected $cookieManager;
 
@@ -18,8 +18,8 @@ class StudentsController extends AppController
     {
         parent::initialize();
 
-        $this->loadComponent('Cookie');
-        $this->cookieManager = new CookieManager($this->request, $this->response);
+        // $this->loadComponent('Cookie');
+        // $this->cookieManager = new CookieManager($this->request, $this->response);
     }
 
     /**
@@ -71,11 +71,11 @@ class StudentsController extends AppController
 
         // $this->Cookie->set('memberId', '1234567890');
 
-        $token = $this->Cookie->read('csrfToken');
+//         $token = $this->Cookie->read('csrfToken');
 
-echo "<pre>token 1 ";
-var_dump($token);
-echo "</pre>";
+// echo "<pre>token 1 ";
+// var_dump($token);
+// echo "</pre>";
 
         // 쿠키 쓰기
         // $this->response = $this->cookieManager->write('token', 'test1234');
@@ -146,8 +146,12 @@ echo "</pre>";
      */
     public function view($id = null)
     {
-        $student = $this->Students->get($id, contain: []);
-        $this->set(compact('student'));
+        $this->Authorization->skipAuthorization();
+
+        $this->getCookie();
+
+        // $student = $this->Students->get($id, contain: []);
+        // $this->set(compact('student'));
     }
 
     /**
