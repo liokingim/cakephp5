@@ -18,6 +18,7 @@ class StudentsController extends AppController
     {
         parent::initialize();
 
+        $this->loadComponent('Cookie');
         $this->cookieManager = new CookieManager($this->request, $this->response);
     }
 
@@ -63,26 +64,49 @@ class StudentsController extends AppController
 
         // return $this->response->withCookie(Cookie::create('userId', $memberData, $options));
 
-        $data = [
-            'memberId' => '1234567890',
-            'token' => '1234567890'
-        ];
+        // $data = [
+        //     'memberId' => '1234567890',
+        //     'token' => '1234567890'
+        // ];
+
+        // $this->Cookie->set('memberId', '1234567890');
+
+        $token = $this->Cookie->read('csrfToken');
+
+echo "<pre>token 1 ";
+var_dump($token);
+echo "</pre>";
 
         // 쿠키 쓰기
         // $this->response = $this->cookieManager->write('token', 'test1234');
         // $this->response = $this->cookieManager->write('memberTokenDetail', 'testafafafafa');
-        // $this->response = $this->cookieManager->write(['memberTokenDetail' => 'testafafafafa']);
-        // $this->response = $this->cookieManager->write(['memberTokenDetail' => 'testafafafafa', 'token' => 'test1234']);
-    //     $this->response = $this->cookieManager->write(['memberTokenDetail' => ['name' => 'test3234234'],
-    //     'memberTokenDetail.id' => 'test1234',
-    //     'memberTokenDetail.test' => 'testtest'
-    // ]);
+        // $this->response = $this->cookieManager->write('memberTokenDetail.id', '567890');
+        // $this->response = $this->cookieManager->write(['memberTokenDetail' => '132344']);
+        $this->response = $this->cookieManager->write(['memberTokenDetail' => 'testafafafafa', 'token' => 'test1234']);
+        $this->response = $this->cookieManager->write([
+        'memberTokenDetail.id' => 'test1234',
+        'memberTokenDetail.token' => 'adfasdsdfgsdgf'
+    ]);
+
+        $memberTokenDetail = $this->Cookie->read('memberTokenDetail');
+        echo "<pre> memberTokenDetail ";
+        var_dump($memberTokenDetail);
+        echo "</pre>";
         // $this->response = $this->cookieManager->write([
         //     'memberTokenDetail' => ['name' => 'test3234234', 'id' => 'tttttt'],
         // ]);
 
+        $cookie = $this->cookieManager->read('memberTokenDetail.token');
+        echo "<pre>memberTokenDetail.id ";
+        var_dump($cookie);
+        echo "</pre>";
 
-        $this->response = $this->cookieManager->write('memberTokenDetail.id', 'test1234');
+
+        $token = $this->cookieManager->read('token');
+        echo "<pre>token ";
+        var_dump($token);
+        echo "</pre>";
+        // $this->response = $this->cookieManager->write('memberTokenDetail.id', 'test1234');
         // $this->response = $this->cookieManager->write('memberTokenDetail', json_encode($data));
 
         // $this->response->withCookieCollection($cookieCollection);
