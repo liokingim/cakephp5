@@ -23,8 +23,6 @@ use InvalidArgumentException;
  */
 class CookiesComponent extends Component
 {
-    use CookiesEncryptionTrait;
-
     /**
      * Cookie default configuration.
      *
@@ -57,7 +55,7 @@ class CookiesComponent extends Component
         /**
          * Set cookie internal salt value
          */
-        $this->setInternalSalt();
+        // $this->setInternalSalt();
 
         /**
          * Cookie encryption key will be set in configuration file under Security key.
@@ -70,14 +68,14 @@ class CookiesComponent extends Component
          *   ...
          * ]
          */
-        $this->setConfig('key', Configure::read('Security.cookieKey', null));
+        // $this->setConfig('key', Configure::read('Security.cookieKey', null));
 
-        if (empty($this->_defaultConfig['path'])) {
-            $this->setConfig('path', $this->getController()->getRequest()->getAttribute('webroot'));
-        }
-        if (empty($this->_defaultConfig['domain'])) {
-            $this->setConfig('domain', $this->cookieDomain());
-        }
+        // if (empty($this->_defaultConfig['path'])) {
+        //     $this->setConfig('path', $this->getController()->getRequest()->getAttribute('webroot'));
+        // }
+        // if (empty($this->_defaultConfig['domain'])) {
+        //     $this->setConfig('domain', $this->cookieDomain());
+        // }
     }
 
     /**
@@ -230,9 +228,9 @@ class CookiesComponent extends Component
         }
 
         // Encryption
-        if ($encrypt) {
-            $value = $this->_encrypt($value);
-        }
+        // if ($encrypt) {
+        //     $value = $this->_encrypt($value);
+        // }
 
         $this->setCookie($parts->name, $value);
     }

@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Http\Cookie\CookieCollection;
+use Cake\Log\Log;
+
 /**
  * Users Controller
  *
  * @property \App\Model\Table\UsersTable $Users
  */
-class UsersController extends AppController
+class UsersController extends SessionController
 {
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
@@ -20,6 +23,27 @@ class UsersController extends AppController
 
     public function login()
     {
+        Log::debug(__CLASS__ . " : " . __METHOD__ . " start");
+        /* The line `->getCookie();` in the `login()` method of the UsersController is calling a method named `getCookie()` within the same class. However, based on the provided code snippet, the `getCookie()` method is not defined in the UsersController class. */
+
+        // $this->response = $this->response->withAddedHeader('Set-Cookie', 'remember_me=1');
+        // $this->response = $this->response->withAddedHeader('Set-Cookie', 'remember_me2=2');
+        // $this->response = $this->response->withAddedHeader('Set-Cookie', 'remember_me3=3');
+        // $this->response = $this->response->withAddedHeader('Set-Cookie', 'remember_me4=4');
+
+        $this->getCookie();
+
+        // $cookieCollection = new CookieCollection();
+
+        // $cookie1 = $this->cookieManager->write('user_id', '123456');
+        // $cookie2 = $this->cookieManager->write('session_token', 'abcde12345');
+
+// var_dump($cookie1);
+
+        // $cookieCollection->add($cookie1);
+        // $cookieCollection->add($cookie2);
+        // $this->response = $this->response->withCookieCollection($cookieCollection);
+
         $this->Authorization->skipAuthorization();
 
         $this->request->allowMethod(['get', 'post']);
@@ -34,10 +58,12 @@ class UsersController extends AppController
 
             return $this->redirect($redirect);
         }
+
         // display error if user submitted and authentication failed
         if ($this->request->is('post') && !$result->isValid()) {
             $this->Flash->error(__('Invalid username or password'));
         }
+        Log::debug(__CLASS__ . " : " . __METHOD__ . " end");
     }
 
     public function logout()

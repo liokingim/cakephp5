@@ -2,10 +2,12 @@
 
 namespace App\Service;
 
+use Cake\Controller\Controller;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\Cookie\CookieCollection;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\I18n\Time;
 use Cake\Utility\Hash;
 
 class CookieManager
@@ -20,14 +22,29 @@ class CookieManager
      */
     private $response;
 
+    private $controller;
+
     public $name = '';
 
     protected $_values = [];
 
-    public function __construct(ServerRequest $request, Response $response)
+    protected $_defaultConfig = [
+        'key' => null,
+        'expires' => 0,
+        'maxAge' => null,
+        'path' => '',
+        'domain' => '',
+        'secure' => false,
+        'httpOnly' => false,
+        'sameSite' => ''
+    ];
+
+
+    public function __construct(Controller $controller)
     {
-        $this->request = $request;
-        $this->response = $response;
+        // $this->request = $request;
+        // $this->response = $response;
+        $this->controller = $controller;
     }
 
     /**
@@ -62,6 +79,7 @@ class CookieManager
         }
 
         $cookieCollection = new CookieCollection();
+        $cookies = [];
 
         foreach ($key as $name => $value) {
 
@@ -94,10 +112,70 @@ class CookieManager
 
             $cookie = Cookie::create($firstName, json_encode($this->_values[$firstName]), $options);
 
-            $cookieCollection = $cookieCollection->add($cookie);
+            // $cookieCollection = $cookieCollection->add($cookie);
+            $cookies[] = $cookie;
         }
 
-        return $this->response->withCookieCollection($cookieCollection);
+        // return $this->response->withCookieCollection($cookieCollection);
+        return $cookies;
+    }
+
+    public function getConfig($key = null, $default = null)
+    {
+        $config = $this->_defaultConfig;
+
+        if ($key) {
+            if (!array_key_exists($key, $config)) {
+                return $default;
+            }
+
+            return $config[$key];
+        }
+
+        if ($default === true) {
+            return (object)$config;
+        }
+
+        return (array)$config;
+    }
+
+    public function setCookie(string $name, string $value): void
+    {
+        $options = $this->getConfig();
+
+        $cookie = $name . '=' . rawurlencode($value);
+        if ($options['expires']) {
+            $cookie .= '; Expires=' . (new Time($options['expires']))->format(DATE_COOKIE);
+        }
+        if ($options['maxAge'] !== null) {
+            $cookie .= '; Max-Age=' . (int)$options['maxAge'];
+        }
+        if ($options['domain']) {
+            $cookie .= '; Domain=' . strtolower($options['domain']);
+        }
+        if ($options['path']) {
+            $cookie .= '; Path=' . $options['path'];
+        }
+        if ($options['secure'] === true) {
+            $cookie .= '; Secure';
+        }
+        if ($options['httpOnly'] === true) {
+            $cookie .= '; HttpOnly';
+        }
+        $sameSite = strtolower($options['sameSite']);
+        if ($sameSite && in_array($sameSite, ['none', 'lax', 'strict'])) {
+            $cookie .= '; SameSite=' . ucfirst($sameSite);
+        }
+
+        // $response = $this->getController()->getResponse()->withHeader('Set-Cookie', $cookie);
+        // $this->getController()->setResponse($response);
+
+        echo "<pre>setCookie3 start";
+        var_dump($cookie);
+        echo "</pre>";
+
+        $response = $this->controller->getResponse()->withAddedHeader('Set-Cookie', $cookie);
+        $this->controller->setResponse($response);
     }
 
     /**
