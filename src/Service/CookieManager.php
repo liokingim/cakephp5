@@ -28,22 +28,10 @@ class CookieManager
 
     protected $_values = [];
 
-    protected $_defaultConfig = [
-        'key' => null,
-        'expires' => 0,
-        'maxAge' => null,
-        'path' => '',
-        'domain' => '',
-        'secure' => false,
-        'httpOnly' => false,
-        'sameSite' => ''
-    ];
-
-
     public function __construct(Controller $controller)
     {
-        // $this->request = $request;
-        // $this->response = $response;
+        $this->request = $controller->getRequest();
+        $this->response = $controller->getResponse();
         $this->controller = $controller;
     }
 
@@ -55,31 +43,31 @@ class CookieManager
      */
     public function write(array|string $key,
                             array|string|float|int|bool $value = null,
-                            mixed $expires = null,
-                            string $path = '/',
-                            bool $secure = false,
-                            bool $httpOnly = true,
-                            mixed $sameSite = null)
+                            array $pOptions = [])
     {
-        if (empty($this->_values[$this->name])) {
+        if (empty($this->_values)) {
             $this->read();
         }
 
+        if (strpos($this->request->getEnv('HTTP_HOST'), ':') !== false) {
+            $domain = preg_replace('/:\d+$', '', $this->request->getEnv('HTTP_HOST'));
+        } else {
+            $domain = $this->request->getEnv('HTTP_HOST');
+        }
+
         $options = [
-            'expires' => $expires,
-            'path' => $path,
-            'domain' => $this->request->domain(),
-            'secure' => $secure,
-            'httponly' => $httpOnly,
-            'samesite' => $sameSite
+            'expires' => isset($pOptions['expires']) ? $pOptions['expires'] : null,
+            'path' => isset($pOptions['path']) ? $pOptions['path'] : "/",
+            'domain' => isset($pOptions['domain']) ? $pOptions['domain'] : $domain,
+            'secure' => isset($pOptions['secure']) ? $pOptions['secure'] : false,
+            'hostonly' => isset($pOptions['hostonly']) ? $pOptions['hostonly'] : false,
+            'httponly' => isset($pOptions['httponly']) ? $pOptions['httponly'] : false,
+            'samesite' => isset($pOptions['samesite']) ? $pOptions['samesite'] : null,
         ];
 
         if (!is_array($key)) {
             $key = [$key => $value];
         }
-
-        $cookieCollection = new CookieCollection();
-        $cookies = [];
 
         foreach ($key as $name => $value) {
 
@@ -92,56 +80,48 @@ class CookieManager
             $firstName = $names[0];
             $isMultiValue = (is_array($value)) || count($names) > 1;
 
-            if (!isset($this->_values[$firstName]) && $isMultiValue) {
-                $this->_values[$firstName] = [];
+            if (!isset($this->_values[$this->name][$firstName]) && $isMultiValue) {
+                $this->_values[$this->name][$firstName] = [];
             }
 
             if (count($names) > 1) {
-                if (is_array($this->_values[$firstName]) && $isMultiValue) {
-                    $this->_values[$firstName] =
-                        Hash::insert($this->_values[$firstName], $names[1], $value);
-                } else if (!is_array($this->_values[$firstName]) && $isMultiValue) {
-                    $this->_values[$firstName] =
-                        Hash::insert([$names[1] => $value], $names[1], $value);
-                } else {
-                    $this->_values[$firstName] = $value;
-                }
+                $this->_values[$this->name][$firstName] = Hash::insert($this->_values[$this->name][$firstName], $names[1], $value);
             } else {
-                $this->_values[$firstName] = $value;
+                $this->_values[$this->name][$firstName] = $value;
             }
 
-            $cookie = Cookie::create($firstName, json_encode($this->_values[$firstName]), $options);
+            $cookie = Cookie::create($firstName, $this->getValue($this->_values[$this->name][$firstName]), $options);
 
-            // $cookieCollection = $cookieCollection->add($cookie);
-            $cookies[] = $cookie;
+            $this->response = $this->response->withAddedHeader('Set-Cookie', $cookie->toHeaderValue());
+            $this->controller->setResponse($this->response);
         }
-
-        // return $this->response->withCookieCollection($cookieCollection);
-        return $cookies;
     }
 
-    public function getConfig($key = null, $default = null)
-    {
-        $config = $this->_defaultConfig;
-
-        if ($key) {
-            if (!array_key_exists($key, $config)) {
-                return $default;
-            }
-
-            return $config[$key];
+    protected function getValue(mixed $value) {
+        if (is_array($value)) {
+            $value = json_encode($value);
         }
 
-        if ($default === true) {
-            return (object)$config;
-        }
-
-        return (array)$config;
+        return $value;
     }
 
     public function setCookie(string $name, string $value): void
     {
-        $options = $this->getConfig();
+        if (strpos($this->request->getEnv('HTTP_HOST'), ':') !== false) {
+            $domain = preg_replace('/:\d+$', '', $this->request->getEnv('HTTP_HOST'));
+        } else {
+            $domain = $this->request->getEnv('HTTP_HOST');
+        }
+
+        $options = [
+            'expires' => isset($pOptions['expires']) ? $pOptions['expires'] : null,
+            'path' => isset($pOptions['path']) ? $pOptions['path'] : "/",
+            'domain' => isset($pOptions['domain']) ? $pOptions['domain'] : $domain,
+            'secure' => isset($pOptions['secure']) ? $pOptions['secure'] : false,
+            'hostonly' => isset($pOptions['hostonly']) ? $pOptions['hostonly'] : false,
+            'httponly' => isset($pOptions['httponly']) ? $pOptions['httponly'] : false,
+            'samesite' => isset($pOptions['samesite']) ? $pOptions['samesite'] : null,
+        ];
 
         $cookie = $name . '=' . rawurlencode($value);
         if ($options['expires']) {
@@ -184,11 +164,11 @@ class CookieManager
     public function read(string $key = null)
     {
         if ($key === null) {
-            $this->_values = $this->request->getCookieParams();
+            $this->_values = $this->controller->getRequest()->getCookieParams();
             return $this->_values;
         }
 
-        return $this->request->getCookie($key);
+        return $this->controller->getRequest()->getCookie($key);
     }
 
     /**
