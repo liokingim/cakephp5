@@ -40,6 +40,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Error\ErrorTrap;
 use Cake\Error\ExceptionTrap;
 use Cake\Http\ServerRequest;
+use Cake\Log\Engine\FileLog;
 use Cake\Log\Log;
 use Cake\Mailer\Mailer;
 use Cake\Mailer\TransportFactory;
@@ -229,3 +230,21 @@ ServerRequest::addDetector('tablet', function ($request) {
 // and https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax
 //\Cake\I18n\FrozenDate::setToStringFormat('dd.MM.yyyy');
 //\Cake\I18n\FrozenTime::setToStringFormat('dd.MM.yyyy HH:mm');
+
+Log::setConfig('shops', [
+    'className' => FileLog::class,
+    'path' => LOGS,
+    'levels' => [],
+    'scopes' => ['orders', 'payments'],
+    'file' => 'shops.log',
+]);
+
+// Configure logs/payments.log to receive all levels, but only
+// those with `payments` scope.
+Log::setConfig('payments', [
+    'className' => FileLog::class,
+    'path' => LOGS,
+    'levels' => [],
+    'scopes' => ['payments'],
+    'file' => 'payments.log',
+]);

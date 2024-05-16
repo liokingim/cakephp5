@@ -33,6 +33,9 @@ class UsersController extends SessionController
 
         $this->getCookie();
 
+        Log::warning('this gets written only to shops.log', ['scope' => ['orders']]);
+        Log::warning('this gets written to both shops.log and payments.log', ['scope' => ['payments']]);
+
         // $cookieCollection = new CookieCollection();
 
         // $cookie1 = $this->cookieManager->write('user_id', '123456');

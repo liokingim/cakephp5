@@ -3,6 +3,15 @@
  * @var \App\View\AppView $this
  * @var iterable<\App\Model\Entity\Students> $students
  */
+
+$this->start('css');
+echo $this->Html->css(['sidebar.css']);
+$this->end();
+
+$this->start('js');
+echo $this->Html->css(['sidebar.js']);
+$this->end();
+
 ?>
 <div class="users index content">
     <?= $this->Html->link(__('New Students'), ['action' => 'add'], ['class' => 'button float-right']) ?>

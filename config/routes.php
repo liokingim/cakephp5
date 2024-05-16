@@ -79,6 +79,8 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/tagged/*', ['controller' => 'Articles', 'action' => 'tags']);
         });
 
+        $builder->connect('/product/add', ['controller' => 'Products', 'action' => 'add']);
+
         $builder->fallbacks();
     });
 
