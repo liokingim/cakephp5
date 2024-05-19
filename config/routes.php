@@ -23,6 +23,7 @@
 
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
 
 /*
  * This file is loaded in the context of the `Application` class.
@@ -81,7 +82,7 @@ return function (RouteBuilder $routes): void {
 
         $builder->connect('/product/add', ['controller' => 'Products', 'action' => 'add']);
 
-        $builder->fallbacks();
+        $builder->fallbacks(DashedRoute::class);
     });
 
     /*
@@ -99,4 +100,17 @@ return function (RouteBuilder $routes): void {
      * });
      * ```
      */
+    // $routes->scope('api', function (RouteBuilder $routes) {
+    //     $routes->setExtensions(['json']);
+    //     $routes->resources('Products');
+    //     $routes->resources('Articles');
+    //     $routes->fallbacks(DashedRoute::class);
+    // });
+
+    $routes->prefix('api', function (RouteBuilder $routes) {
+        $routes->setExtensions(['json']);
+        $routes->resources('Products');
+        $routes->resources('Articles');
+        $routes->fallbacks(DashedRoute::class);
+    });
 };

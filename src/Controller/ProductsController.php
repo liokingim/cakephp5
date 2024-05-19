@@ -46,7 +46,7 @@ class ProductsController extends AppController
 
             // 검증 성공 시 API 서버로 데이터 전송
             $http = new Client();
-            $response = $http->post('http://api-server.example.com/products', $data);
+            $response = $http->post('http://localhost/api/products/add', $data);
 
             if ($response->isOk()) {
                 $this->Flash->success('Product has been saved.');
