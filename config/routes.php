@@ -80,7 +80,9 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/tagged/*', ['controller' => 'Articles', 'action' => 'tags']);
         });
 
-        $builder->connect('/product/add', ['controller' => 'Products', 'action' => 'add']);
+        $builder->connect('/products', ['controller' => 'Products', 'action' => 'index']);
+        $builder->connect('/products/add', ['controller' => 'Products', 'action' => 'add']);
+        $builder->connect('/products/get/*', ['controller' => 'Products', 'action' => 'get']);
 
         $builder->fallbacks(DashedRoute::class);
     });
@@ -110,6 +112,11 @@ return function (RouteBuilder $routes): void {
     $routes->prefix('api', function (RouteBuilder $routes) {
         $routes->setExtensions(['json']);
         $routes->resources('Products');
+        $routes->resources('Products', [
+            'map' => [
+                'get' => [ 'action' => 'get', 'method' => 'GET', 'path' => 'get/:id']
+            ]
+        ]);
         $routes->resources('Articles');
         $routes->fallbacks(DashedRoute::class);
     });

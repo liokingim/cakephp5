@@ -6,6 +6,8 @@ namespace App\Controller;
 use App\Controller\AppController;
 use App\Model\Validation\ProductValidator;
 use Cake\Http\Client;
+use Cake\Http\Exception\NotFoundException;
+use Cake\Log\Log;
 
 class ProductsController extends AppController
 {
@@ -17,13 +19,19 @@ class ProductsController extends AppController
         $this->loadComponent('Authentication.Authentication');
 
         // 특정 액션에 대해 인증 비활성화
-        $this->Authentication->allowUnauthenticated(['add']);
+        $this->Authentication->allowUnauthenticated(['index', 'add', 'get']);
 
         // 권한 미들웨어 설정
         $this->loadComponent('Authorization.Authorization');
 
         // 특정 액션에 대해 권한 비활성화
-        $this->Authorization->skipAuthorization(['add']);
+        $this->Authorization->skipAuthorization(['index', 'add', 'get']);
+    }
+
+    public function index()
+    {
+        $products = $this->Products->find('all');
+        $this->set(compact('products'));
     }
 
     public function add()
@@ -54,5 +62,29 @@ class ProductsController extends AppController
                 $this->Flash->error('Failed to save product to API server.');
             }
         }
+    }
+
+    public function get($id = null)
+    {
+        Log::write("info", __CLASS__ . " : " . $this->request->getParam('action') . " start");
+
+        if (!$id) {
+            throw new NotFoundException(__('Invalid product ID'));
+        }
+
+        $client = new Client();
+        $response = $client->get("http://localhost/cakephp-app/api/products/get/{$id}");
+
+        Log::write("info", "getStringBody: ".$response->getStringBody());
+
+        if ($response->getStatusCode() != 200) {
+            throw new NotFoundException(__('Product not found'));
+        }
+
+        $product = $response->getJson()["product"];
+
+        $this->set(compact('product'));
+
+        Log::write("info", __CLASS__ . " : " . $this->request->getParam('action') . " end");
     }
 }
