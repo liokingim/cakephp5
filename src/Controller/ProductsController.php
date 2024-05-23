@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Model\Validation\CustomValidator;
 use App\Model\Validation\ProductValidator;
 use Cake\Http\Client;
 use Cake\Http\Exception\NotFoundException;
@@ -11,6 +12,9 @@ use Cake\Log\Log;
 
 class ProductsController extends AppController
 {
+    private $Products;
+    private $ProductionDates;
+
     public function initialize(): void
     {
         parent::initialize();
@@ -19,13 +23,17 @@ class ProductsController extends AppController
         $this->loadComponent('Authentication.Authentication');
 
         // 특정 액션에 대해 인증 비활성화
-        $this->Authentication->allowUnauthenticated(['index', 'add', 'get']);
+        $this->Authentication->allowUnauthenticated(['index', 'add', 'get', 'addProductionDate', 'registProductionDate']);
 
         // 권한 미들웨어 설정
         $this->loadComponent('Authorization.Authorization');
 
         // 특정 액션에 대해 권한 비활성화
-        $this->Authorization->skipAuthorization(['index', 'add', 'get']);
+        $this->Authorization->skipAuthorization(['index', 'add', 'get','addProductionDate', 'registProductionDate']);
+
+        $this->Products = $this->fetchTable('Products');
+        $this->ProductionDates = $this->fetchTable('ProductionDates');
+        // $this->loadComponent('Paginator');
     }
 
     public function index()
@@ -61,6 +69,66 @@ class ProductsController extends AppController
             } else {
                 $this->Flash->error('Failed to save product to API server.');
             }
+        }
+    }
+
+    public function addProductionDate($productId = null)
+    {
+        if (!$productId || !$this->Products->exists(['id' => $productId])) {
+            $this->Flash->error(__('Invalid product.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $productionDate = $this->ProductionDates->newEmptyEntity();
+        $latestProductionDate = $this->ProductionDates->find()
+            ->where(['product_id' => $productId])
+            ->order(['created' => 'DESC'])
+            ->first();
+
+        if ($this->request->is('post')) {
+            $productionDate = $this->ProductionDates->patchEntity($productionDate, $this->request->getData());
+            $productionDate->product_id = $productId;
+
+            if ($this->ProductionDates->save($productionDate)) {
+                $this->Flash->success(__('The production date has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The production date could not be saved. Please, try again.'));
+        }
+
+        $product = $this->Products->get($productId);
+        $this->set(compact('productionDate', 'product', 'latestProductionDate'));
+    }
+
+    public function registProductionDate()
+    {
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+
+
+
+            $productionDate = $this->ProductionDates->newEmptyEntity();
+            $productionDate = $this->ProductionDates->patchEntity($productionDate, $data);
+
+            if ($this->ProductionDates->save($productionDate)) {
+                $response = [
+                    'status' => 'success',
+                    'message' => 'The production date has been saved.'
+                ];
+            } else {
+                $response = [
+                    'status' => 'error',
+                    'message' => 'The production date could not be saved. Please, try again.',
+                    'errors' => $productionDate->getErrors()
+                ];
+            }
+
+            $this->set([
+                'response' => $response,
+                '_serialize' => 'response'
+            ]);
+
+            return $this->redirect(['action' => 'index']);
         }
     }
 

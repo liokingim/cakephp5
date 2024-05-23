@@ -82,7 +82,9 @@ return function (RouteBuilder $routes): void {
 
         $builder->connect('/products', ['controller' => 'Products', 'action' => 'index']);
         $builder->connect('/products/add', ['controller' => 'Products', 'action' => 'add']);
+        $builder->connect('/products/add_production_date/:id', ['controller' => 'Products', 'action' => 'addProductionDate']);
         $builder->connect('/products/get/*', ['controller' => 'Products', 'action' => 'get']);
+        $builder->connect('/products/regist_production_date', ['controller' => 'Products', 'action' => 'registProductionDate']);
 
         $builder->fallbacks(DashedRoute::class);
     });

@@ -10,6 +10,7 @@
             <th>Price</th>
             <th>Quantity</th>
             <th>Actions</th>
+            <th>ModifyDate</th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +21,9 @@
                 <td><?= h($product->quantity) ?></td>
                 <td>
                     <?= $this->Html->link('View', ['action' => 'get', $product->id]) ?>
+                </td>
+                <td>
+                    <?= $this->Html->link('ModifyDate', ['action' => 'addProductionDate', $product->id]) ?>
                 </td>
             </tr>
         <?php endforeach; ?>
