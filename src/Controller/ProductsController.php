@@ -105,8 +105,6 @@ class ProductsController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->getData();
 
-
-
             $productionDate = $this->ProductionDates->newEmptyEntity();
             $productionDate = $this->ProductionDates->patchEntity($productionDate, $data);
 
