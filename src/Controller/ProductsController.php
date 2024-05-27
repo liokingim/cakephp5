@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use App\Model\Validation\CustomValidator;
 use App\Model\Validation\ProductValidator;
+use App\Utility\RedisStatus;
 use Cake\Http\Client;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Log\Log;
@@ -152,5 +153,11 @@ class ProductsController extends AppController
         $this->set(compact('product'));
 
         Log::write("info", __CLASS__ . " : " . $this->request->getParam('action') . " end");
+    }
+
+    public function checkRedis()
+    {
+        $isRedisRunning = RedisStatus::isRedisRunning();
+        $this->set(compact('isRedisRunning'));
     }
 }

@@ -54,3 +54,12 @@ The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
 framework by default. You can, however, replace it with any other library or
 custom styles.
 
+## Redis TS
+
+https://pecl.php.net/package/redis/6.0.2/windows
+
+8.2 Thread Safe (TS) x64
+
+php.ini
+
+extension=redis
