@@ -80,6 +80,14 @@ return function (RouteBuilder $routes): void {
             $builder->connect('/tagged/*', ['controller' => 'Articles', 'action' => 'tags']);
         });
 
+        $builder->scope('/users', function (RouteBuilder $builder) {
+            $builder->connect('/users/index', ['controller' => 'Users', 'action' => 'index']);
+        });
+
+        // $builder->connect('/users', ['controller' => 'Users', 'action' => 'index']);
+        // $builder->connect('/users/index', ['controller' => 'Users', 'action' => 'index']);
+
+
         $builder->connect('/products', ['controller' => 'Products', 'action' => 'index']);
         $builder->connect('/products/add', ['controller' => 'Products', 'action' => 'add']);
         $builder->connect('/products/add_production_date/:id', ['controller' => 'Products', 'action' => 'addProductionDate']);

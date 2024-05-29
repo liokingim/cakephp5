@@ -13,6 +13,23 @@ use Cake\Log\Log;
  */
 class UsersController extends SessionController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        // 인증 미들웨어 설정
+        $this->loadComponent('Authentication.Authentication');
+
+        // 특정 액션에 대해 인증 비활성화
+        $this->Authentication->allowUnauthenticated(['index']);
+
+        // 권한 미들웨어 설정
+        $this->loadComponent('Authorization.Authorization');
+
+        // 특정 액션에 대해 권한 비활성화
+        $this->Authorization->skipAuthorization(['index']);
+    }
+
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -30,8 +47,6 @@ class UsersController extends SessionController
         // $this->response = $this->response->withAddedHeader('Set-Cookie', 'remember_me2=2');
         // $this->response = $this->response->withAddedHeader('Set-Cookie', 'remember_me3=3');
         // $this->response = $this->response->withAddedHeader('Set-Cookie', 'remember_me4=4');
-
-        $this->getCookie();
 
         Log::warning('this gets written only to shops.log', ['scope' => ['orders']]);
         Log::warning('this gets written to both shops.log and payments.log', ['scope' => ['payments']]);

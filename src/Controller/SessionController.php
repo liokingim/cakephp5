@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Service\CookieManager;
+use Cake\Event\EventInterface;
 use Cake\Log\Log;
 
 class SessionController extends AppController
 {
     protected $cookieManager;
+    protected $event;
 
     public function initialize(): void
     {
@@ -18,13 +20,30 @@ class SessionController extends AppController
         Log::debug(__CLASS__ . " : ". __METHOD__ . " start");
         $this->loadComponent('Cookie', [$this]);
         $this->cookieManager = new CookieManager($this);
+
         // $this->cookieManager = new CookieManager($this->request, $this->response);
         Log::debug(__CLASS__ . " : " . __METHOD__ . " end");
     }
 
-    public function getCookie(): void
+    public function beforeFilter(EventInterface $event)
     {
+        parent::beforeFilter($event);
+        $this->event = $event;
         Log::debug(__CLASS__ . " : " . __METHOD__ . " start");
+        // $event->stopPropagation();
+
+        $this->getCookie();
+        $this->setCookie();
+        Log::debug(__CLASS__ . " : " . __METHOD__ . " end");
+    }
+
+    public function getCookie()
+    {
+        Log::debug(__CLASS__ . " : " . __METHOD__ . " start " . __LINE__);
+        $this->event->stopPropagation();
+
+        return $this->redirect("https://www.daum.net");
+
         echo "<pre>getCookie start";
         // var_dump($token);
         echo "</pre>";
@@ -59,6 +78,20 @@ class SessionController extends AppController
         // $this->Cookie->destory();
 
         // $this->response = $this->cookieManager->write('token_view', 'afafafdfgsdgsdg');
+
+        Log::debug(__CLASS__ . " : " . __METHOD__ . " end");
+    }
+
+
+    public function setCookie()
+    {
+        Log::debug(__CLASS__ . " : " . __METHOD__ . " start " . __LINE__);
+
+        Log::debug(__CLASS__ . " : isStopped " . $this->event->isStopped());
+
+        if ($this->event->isStopped()) {
+            return false;
+        }
 
         Log::debug(__CLASS__ . " : " . __METHOD__ . " end");
     }
