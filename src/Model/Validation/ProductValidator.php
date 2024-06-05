@@ -26,36 +26,56 @@ class ProductValidator extends Validator
                 ]
         ]);
 
-        $this->add('quantity', [
-                'valid' => [
-                    'rule' => ['naturalNumber', true], // 자연수 검증
-                    'message' => 'Please enter a valid quantity'
-                ]
+        // $this->add('quantity', [
+        //         'valid' => [
+        //             'rule' => ['naturalNumber', true], // 자연수 검증
+        //             'message' => 'Please enter a valid quantity'
+        //         ]
+        // ]);
+
+        // $this->add('origin', [
+        //     'notEmpty' => [
+        //         'rule' => 'notBlank',
+        //         'message' => 'Origin is required'
+        //     ]
+        // ]);
+
+        // $this->add('email', [
+        //     'validFormat' => [
+        //         'rule' => ['email'],
+        //         'message' => 'Please enter a valid email address'
+        //     ]
+        // ]);
+
+        // $this->add('password', [
+        //     'notEmpty' => [
+        //         'rule' => ['notBlank'],
+        //         'message' => 'Password is required'
+        //     ],
+        //     'minLength' => [
+        //         'rule' => ['minLength', 6],
+        //         'message' => 'Password must be at least 6 characters long'
+        //     ]
+        // ]);
+    }
+
+    public function addMoreRules()
+    {
+        $this->field('name')->rules();
+
+        // 기존에 추가된 'name' 필드에 새로운 규칙 추가
+        $this->add('name', [
+            'minLength' => [
+                'rule' => ['minLength', 3],
+                'message' => 'Product name must be at least 3 characters long'
+            ]
         ]);
 
-
-        $this->add('origin', [
+        // 기존에 추가된 'quantity' 필드에 새로운 규칙 추가
+        $this->add('price', [
             'notEmpty' => [
                 'rule' => 'notBlank',
-                'message' => 'Origin is required'
-            ]
-        ]);
-
-        $this->add('email', [
-            'validFormat' => [
-                'rule' => ['email'],
-                'message' => 'Please enter a valid email address'
-            ]
-        ]);
-
-        $this->add('password', [
-            'notEmpty' => [
-                'rule' => ['notBlank'],
-                'message' => 'Password is required'
-            ],
-            'minLength' => [
-                'rule' => ['minLength', 6],
-                'message' => 'Password must be at least 6 characters long'
+                'message' => 'Price is required'
             ]
         ]);
     }

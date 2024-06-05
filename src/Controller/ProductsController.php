@@ -47,7 +47,12 @@ class ProductsController extends AppController
     {
         if ($this->request->is('post')) {
             $data = $this->request->getData();
+
             $validator = new ProductValidator();
+
+            // 추가적인 유효성 검사 규칙 추가
+            $validator->addMoreRules();
+
             $errors = $validator->validate($data);
 
             if (!empty($errors)) {

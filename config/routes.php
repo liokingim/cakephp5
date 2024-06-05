@@ -124,7 +124,8 @@ return function (RouteBuilder $routes): void {
         $routes->resources('Products');
         $routes->resources('Products', [
             'map' => [
-                'get' => [ 'action' => 'get', 'method' => 'GET', 'path' => 'get/:id']
+                'get' => [ 'action' => 'get', 'method' => 'GET', 'path' => 'get/:id'],
+                'post' => ['action' => 'add', 'method' => 'POST', 'path' => 'add/']
             ]
         ]);
         $routes->resources('Articles');
