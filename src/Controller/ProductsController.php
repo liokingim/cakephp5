@@ -50,6 +50,9 @@ class ProductsController extends AppController
 
             $validator = new ProductValidator();
 
+            // 전체 데이터 배열을 설정
+            $validator->set($data);
+
             // 추가적인 유효성 검사 규칙 추가
             $validator->addMoreRules();
 

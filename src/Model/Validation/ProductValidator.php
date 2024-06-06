@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Model\Validation;
 
+use App\Model\Traits\SetFieldTrait;
 use Cake\Validation\Validator;
 
 class ProductValidator extends Validator
 {
+    use SetFieldTrait;
+
     public function __construct()
     {
         parent::__construct();
