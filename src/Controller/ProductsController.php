@@ -7,6 +7,8 @@ use App\Controller\AppController;
 use App\Model\Validation\CustomValidator;
 use App\Model\Validation\ProductValidator;
 use App\Utility\RedisStatus;
+use Cake\Cache\Cache;
+use Cake\Core\Configure;
 use Cake\Http\Client;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Log\Log;

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Model\Validation;
 
+use App\Model\Traits\RuleNotBlankTrait;
 use App\Model\Traits\SetFieldTrait;
 use Cake\Validation\Validator;
 
 class ProductValidator extends Validator
 {
     use SetFieldTrait;
+    use RuleNotBlankTrait;
 
     public function __construct()
     {
