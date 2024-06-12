@@ -1,6 +1,7 @@
 <?php
 
 ?>
+<a href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'add'], ['fullBase' => true]) ?>">상품추가</a>
 
 <h1>Product List</h1>
 <table>

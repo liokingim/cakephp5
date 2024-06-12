@@ -12,6 +12,7 @@ use Cake\Core\Configure;
 use Cake\Http\Client;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Log\Log;
+use KubAT\PhpSimple\HtmlDomParser;
 
 class ProductsController extends AppController
 {
@@ -41,6 +42,18 @@ class ProductsController extends AppController
 
     public function index()
     {
+        // $this->autoRender = false;
+
+        // $str = '<a><b>Hello!</b></a>';
+
+        // $dom = HtmlDomParser::str_get_html($str);
+
+        // // $dom = HtmlDomParser::file_get_html($file_name);
+        // $elems = $dom->find('b', 0)->plaintext;
+        // // var_dump($dom->plaintext);
+
+        // var_dump($elems);
+
         $products = $this->Products->find('all');
         $this->set(compact('products'));
     }
