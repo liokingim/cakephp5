@@ -13,6 +13,7 @@ use Cake\Http\Client;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Log\Log;
 use KubAT\PhpSimple\HtmlDomParser;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductsController extends AppController
 {
