@@ -55,6 +55,35 @@ class ProductsController extends AppController
 
         // var_dump($elems);
 
+
+// 원본 HTML 문자열
+$htmlString = '<html><body><p class="example">Hello, World!</p><div class="example">Another Element</div></body></html>';
+
+// DOMDocument 객체 생성
+$dom = new DOMDocument('1.0', 'UTF-8');
+
+// HTML을 로드 (에러 무시)
+@$dom->loadHTML($htmlString);
+
+// DOMXPath 객체 생성
+$xpath = new DOMXPath($dom);
+
+// 특정 클래스 이름을 가진 모든 요소 찾기 (예: class가 'example'인 요소)
+$elements = $xpath->query('//*[@class="example"]');
+
+foreach ($elements as $element) {
+    // 요소의 값 변경
+    $element->nodeValue = 'New Content for class example';
+}
+
+// DOM을 문자열로 변환
+$newHtmlString = $dom->saveHTML();
+
+// 변경된 HTML 출력
+echo $newHtmlString;
+
+
+
         $products = $this->Products->find('all');
         $this->set(compact('products'));
     }
