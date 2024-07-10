@@ -74,6 +74,15 @@ $elements = $xpath->query('//*[@class="example"]');
 foreach ($elements as $element) {
     // 요소의 값 변경
     $element->nodeValue = 'New Content for class example';
+
+    // 요소의 클래스 속성 변경
+    $element->setAttribute('class', 'new-class');
+
+    // 요소의 스타일 속성 추가
+    $element->setAttribute('style', 'color: red; font-size: 20px;');
+
+    // 요소의 ID 속성 변경
+    $element->setAttribute('id', 'new-id');
 }
 
 // DOM을 문자열로 변환
