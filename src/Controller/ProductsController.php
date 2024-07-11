@@ -56,40 +56,40 @@ class ProductsController extends AppController
         // var_dump($elems);
 
 
-// 원본 HTML 문자열
-$htmlString = '<html><body><p class="example">Hello, World!</p><div class="example">Another Element</div></body></html>';
+// // 원본 HTML 문자열
+// $htmlString = '<html><body><p class="example">Hello, World!</p><div class="example">Another Element</div></body></html>';
 
-// DOMDocument 객체 생성
-$dom = new DOMDocument('1.0', 'UTF-8');
+// // DOMDocument 객체 생성
+// $dom = new DOMDocument('1.0', 'UTF-8');
 
-// HTML을 로드 (에러 무시)
-@$dom->loadHTML($htmlString);
+// // HTML을 로드 (에러 무시)
+// @$dom->loadHTML($htmlString);
 
-// DOMXPath 객체 생성
-$xpath = new DOMXPath($dom);
+// // DOMXPath 객체 생성
+// $xpath = new DOMXPath($dom);
 
-// 특정 클래스 이름을 가진 모든 요소 찾기 (예: class가 'example'인 요소)
-$elements = $xpath->query('//*[@class="example"]');
+// // 특정 클래스 이름을 가진 모든 요소 찾기 (예: class가 'example'인 요소)
+// $elements = $xpath->query('//*[@class="example"]');
 
-foreach ($elements as $element) {
-    // 요소의 값 변경
-    $element->nodeValue = 'New Content for class example';
+// foreach ($elements as $element) {
+//     // 요소의 값 변경
+//     $element->nodeValue = 'New Content for class example';
 
-    // 요소의 클래스 속성 변경
-    $element->setAttribute('class', 'new-class');
+//     // 요소의 클래스 속성 변경
+//     $element->setAttribute('class', 'new-class');
 
-    // 요소의 스타일 속성 추가
-    $element->setAttribute('style', 'color: red; font-size: 20px;');
+//     // 요소의 스타일 속성 추가
+//     $element->setAttribute('style', 'color: red; font-size: 20px;');
 
-    // 요소의 ID 속성 변경
-    $element->setAttribute('id', 'new-id');
-}
+//     // 요소의 ID 속성 변경
+//     $element->setAttribute('id', 'new-id');
+// }
 
-// DOM을 문자열로 변환
-$newHtmlString = $dom->saveHTML();
+// // DOM을 문자열로 변환
+// $newHtmlString = $dom->saveHTML();
 
-// 변경된 HTML 출력
-echo $newHtmlString;
+// // 변경된 HTML 출력
+// echo $newHtmlString;
 
 
 
