@@ -1,0 +1,22 @@
+.tabs {
+    list-style-type: none;
+    padding: 0 20px 0 20px;
+    overflow-x: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    background-color: rgb(189, 189, 189);
+}
+
+.tabs ul li {
+    color: rgb(0, 0, 0);
+    display: inline-block;
+    padding: 20px 0px 0 0px;
+}
+
+.tabs ul li a {
+    margin: 0 20px 0 20px;
+    font-weight: bold;
+    color: crimson;
+    display: inline-block;
+    padding: 1em;
+}
