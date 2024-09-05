@@ -22,10 +22,12 @@
     </ul>
 </div>
 
-<table>
-    <thead>
+<table class="parts-table">
+    <thead class="parts-table-thead">
         <tr>
-            <th>Name</th>
+            <th class="sortable" style="width: 3rem;">
+                Name
+            </th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Actions</th>
@@ -73,4 +75,6 @@
     touchArea.addEventListener('touchend', function() {
         isTouching = false;
     });
+
+    $('.parts-table th').resizable({handles: 'e', minWidth: 24});
 </script>

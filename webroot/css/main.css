@@ -20,3 +20,25 @@
     display: inline-block;
     padding: 1em;
 }
+
+.parts-table-thead th {
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-left: 8px;
+}
+
+.parts-table-thead th::before {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    content: "";
+    height: 22px;
+    border-right: solid 1px #ddd;
+    margin: 1px 0;
+}
+
+.parts-table-thead th.sortable {
+    cursor: pointer;
+}
