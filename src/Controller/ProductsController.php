@@ -24,6 +24,10 @@ class ProductsController extends AppController
     {
         parent::initialize();
 
+        $controllerName = $this->request->getParam('controller');
+
+        Log::write("info", __CLASS__ . " : " . __LINE__ . " : " . $this->request->getParam('action') . " end");
+
         // 인증 미들웨어 설정
         $this->loadComponent('Authentication.Authentication');
 

@@ -41,6 +41,9 @@ use Authorization\AuthorizationServiceProviderInterface;
 use Authorization\Middleware\AuthorizationMiddleware;
 use Authorization\Policy\OrmResolver;
 use Cake\Http\Middleware\EncryptedCookieMiddleware;
+use Cake\Http\ServerRequest;
+use Cake\Log\Log;
+use Predis\Response\ResponseInterface;
 
 /**
  * Application setup class.
@@ -83,6 +86,24 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         // 쿠키 암호화를 위한 키
         $encryptionKey = env('SECURITY_SALT', '__SALT__');
 
+        $csrf = new CsrfProtectionMiddleware([
+            'httponly' => true,
+        ]);
+
+        // 특정 액션을 CSRF 검증에서 제외
+        $csrf->skipCheckCallback(function (ServerRequestInterface $request) {
+            Log::write("info", __CLASS__ . " : " . __LINE__ . " : [" . $request->getUri()->getPath() . "] end");
+            Log::write("info", __CLASS__ . " : " . __LINE__ . " : [" . var_export($request->getAttribute('params')['controller'], true) . "] end");
+            Log::write("info", __CLASS__ . " : " . __LINE__ . " : [" . var_export($request->getAttribute('params')['action'], true) . "] end");
+            if ($request->getAttribute('params')['controller'] === 'Products' &&
+                $request->getAttribute('params')['action'] === 'index') {
+                Log::write("info", __CLASS__ . " : " . __LINE__ . " : --- CSRF 검증에서 제외 --- end");
+                return true;
+            }
+
+            return false;
+        });
+
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
@@ -118,9 +139,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/4/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
-            ->add(new CsrfProtectionMiddleware([
-                'httponly' => true,
-            ]));
+            // ->add(new CsrfProtectionMiddleware([
+            //     'httponly' => true,
+            // ]))
+            ->add($csrf);
 
         return $middlewareQueue;
     }

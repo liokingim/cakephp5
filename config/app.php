@@ -412,4 +412,20 @@ return [
         //     'config' => 'session',
         // ],
     ],
+
+    'debug_kit' => [
+        'className' => 'Cake\Database\Connection',
+        'driver' => 'Cake\Database\Driver\Mysql',
+        'persistent' => false,
+        'host' => 'localhost',
+        //'port' => 'nonstandard_port_number',
+        'username' => 'dbusername',    // Your DB username here
+        'password' => 'dbpassword',    // Your DB password here
+        'database' => 'debug_kit',
+        'encoding' => 'utf8',
+        'timezone' => 'UTC',
+        'cacheMetadata' => true,
+        'quoteIdentifiers' => false,
+        //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
+    ],
 ];
