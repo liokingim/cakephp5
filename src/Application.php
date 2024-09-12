@@ -92,12 +92,12 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
         // 특정 액션을 CSRF 검증에서 제외
         $csrf->skipCheckCallback(function (ServerRequestInterface $request) {
-            Log::write("info", __CLASS__ . " : " . __LINE__ . " : [" . $request->getUri()->getPath() . "] end");
-            Log::write("info", __CLASS__ . " : " . __LINE__ . " : [" . var_export($request->getAttribute('params')['controller'], true) . "] end");
-            Log::write("info", __CLASS__ . " : " . __LINE__ . " : [" . var_export($request->getAttribute('params')['action'], true) . "] end");
+            Log::info(__CLASS__ . " : " . __LINE__ . " : [" . $request->getUri()->getPath() . "] end");
+            Log::info(__CLASS__ . " : " . __LINE__ . " : [" . var_export($request->getAttribute('params')['controller'], true) . "] end");
+            Log::info(__CLASS__ . " : " . __LINE__ . " : [" . var_export($request->getAttribute('params')['action'], true) . "] end");
             if ($request->getAttribute('params')['controller'] === 'Products' &&
                 $request->getAttribute('params')['action'] === 'index') {
-                Log::write("info", __CLASS__ . " : " . __LINE__ . " : --- CSRF 검증에서 제외 --- end");
+                Log::info(__CLASS__ . " : " . __LINE__ . " : --- CSRF 검증에서 제외 --- end");
                 return true;
             }
 
