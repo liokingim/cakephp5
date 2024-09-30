@@ -107,7 +107,7 @@ return [
          * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
          * If you set 'className' => 'Null' core cache will be disabled.
          */
-        '_cake_core_' => [
+        '_cake_translations_' => [
             'className' => FileEngine::class,
             'prefix' => 'myapp_cake_core_',
             'path' => CACHE . 'persistent' . DS,
@@ -129,6 +129,10 @@ return [
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEMODEL_URL', null),
+        ],
+
+        'session' => [
+            'className' => Redis::class,
         ],
     ],
 
@@ -404,14 +408,14 @@ return [
      *
      * To use database sessions, load the SQL file located at config/schema/sessions.sql
      */
-    'Session' => [
-        // 'defaults' => 'php',
-        'defaults' => 'cake',
-        // 'defaults' => 'cache',
-        // 'handler' => [
-        //     'config' => 'session',
-        // ],
-    ],
+    // 'Session' => [
+    //     // 'defaults' => 'php',
+    //     'defaults' => 'cake',
+    //     // 'defaults' => 'cache',
+    //     // 'handler' => [
+    //     //     'config' => 'session',
+    //     // ],
+    // ],
 
     'debug_kit' => [
         'className' => 'Cake\Database\Connection',

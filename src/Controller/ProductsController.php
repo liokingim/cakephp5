@@ -103,6 +103,15 @@ class ProductsController extends AppController
 
     public function add()
     {
+        // // 세션 객체 가져오기
+        // $session = $this->request->getSession();
+
+        // // 세션에 저장된 모든 데이터 가져오기
+        // $allSessionData = $session->read();
+
+        // // 세션 데이터를 디버그로 출력
+        // Log::write("info", "----" . print_r($allSessionData, true));
+
         if ($this->request->is('post')) {
             $data = $this->request->getData();
 
