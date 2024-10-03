@@ -119,6 +119,12 @@ return [
         'ignoreAuthorization' => true
     ],
 
+    'Cache' => [
+        'session' => [
+            'className' => Redis::class,
+        ],
+    ],
+
     'Session' => [
         'defaults' => 'cache',
         'handler' => [

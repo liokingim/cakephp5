@@ -130,10 +130,6 @@ return [
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEMODEL_URL', null),
         ],
-
-        'session' => [
-            'className' => Redis::class,
-        ],
     ],
 
     /*
