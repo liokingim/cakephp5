@@ -11,7 +11,10 @@ use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Http\Client;
 use Cake\Http\Exception\NotFoundException;
+
+use Cake\I18n\Time;
 use Cake\Log\Log;
+use DateTime;
 use KubAT\PhpSimple\HtmlDomParser;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -47,6 +50,24 @@ class ProductsController extends AppController
 
     public function index()
     {
+        $departureDate = "20241023";
+        $departureHour = "24";
+        $departureMinute = "00";
+
+        if ($departureHour . $departureMinute >= '2400') {
+            $formattedDate = DateTime::createFromFormat('Ymd', $departureDate)->format('Y-m-d');
+
+            // 다음 날로 넘어가는 처리
+            $prevDateObj = new DateTime($formattedDate);
+
+            $prevDateObj->modify('+1 days');
+
+            $departureDate = $prevDateObj->format('Ymd');  // 날짜 형식 재정의
+
+            // 24시 이상의 시간을 0시로 변경
+            $departureHour = "00";
+        }
+
         // $this->autoRender = false;
 
         // $str = '<a><b>Hello!</b></a>';

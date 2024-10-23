@@ -49,7 +49,7 @@ return [
              * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
              * the following line and set the port accordingly
              */
-            //'port' => 'non_standard_port_number',
+            'port' => '3309',
 
             'username' => env('DATABASE_USERNAME', 'root'),
             'password' => env('DATABASE_PASSWORD', ''),
@@ -119,22 +119,22 @@ return [
         'ignoreAuthorization' => true
     ],
 
-    'Cache' => [
-        'session' => [
-            'className' => Redis::class,
-        ],
-    ],
+    // 'Cache' => [
+    //     'session' => [
+    //         'className' => Redis::class,
+    //     ],
+    // ],
 
-    'Session' => [
-        'defaults' => 'cache',
-        'handler' => [
-            'config' => 'session',
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'port' => env('REDIS_PORT', '6379'),
-            'timeout' => 30,
-            'persistent' => false,
-            'database' => 0,
-            'prefix' => 'myapp_session_',
-        ],
-    ],
+    // 'Session' => [
+    //     'defaults' => 'cache',
+    //     'handler' => [
+    //         'config' => 'session',
+    //         'host' => env('REDIS_HOST', '127.0.0.1'),
+    //         'port' => env('REDIS_PORT', '6379'),
+    //         'timeout' => 30,
+    //         'persistent' => false,
+    //         'database' => 0,
+    //         'prefix' => 'myapp_session_',
+    //     ],
+    // ],
 ];
