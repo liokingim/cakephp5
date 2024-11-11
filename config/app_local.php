@@ -99,18 +99,20 @@ return [
     ],
 
     'Log' => [
-        'debug' => [
-            'className' => 'App\Log\Engine\CustomFileLog',
-            'path' => LOGS,
-            'file' => 'debug.log',
-            'levels' => ['notice', 'info', 'debug'],
-            'url' => env('LOG_DEBUG_URL', null),
-        ],
+        // 'debug' => [
+        //     'className' => 'App\Log\Engine\CustomFileLog',
+        //     'path' => LOGS,
+        //     'file' => 'debug.log',
+        //     // 'levels' => ['notice', 'info', 'debug'],
+        //     'levels' => ['info'],
+        //     'url' => env('LOG_DEBUG_URL', null),
+        // ],
         'error' => [
             'className' => 'App\Log\Engine\CustomFileLog',
             'path' => LOGS,
             'file' => 'error.log',
-            'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
+            // 'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
+            'levels' => ['alert'],
             'url' => env('LOG_ERROR_URL', null),
         ],
     ],

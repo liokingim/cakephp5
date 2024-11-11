@@ -50,6 +50,9 @@ class ProductsController extends AppController
 
     public function index()
     {
+        Log::info('This is an info message.');
+        Log::error('This is an error message.');
+
         $departureDate = "20241023";
         $departureHour = "24";
         $departureMinute = "00";
