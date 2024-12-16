@@ -12,7 +12,7 @@
         "cakephp/migrations": "^4.0.0",
         "cakephp/plugin-installer": "^2.0",
         "kub-at/php-simple-html-dom-parser": "^1.9",
-        "mobiledetect/mobiledetectlib": "^3.74",
+        "mobiledetect/mobiledetectlib": "^4.8",
         "predis/predis": "^2.2",
         "symfony/http-foundation": "^7.1"
     },
